@@ -5,12 +5,15 @@ from pymongo import MongoClient, UpdateOne, InsertOne
 import datetime
 import json
 import traceback
+from typing import Dict, Any
 
 class MongoHandler(logging.Handler):
-    def __init__(self, config, batch_size=10, fallback_file="log_fallback.txt"):
+    def __init__(self, config: Dict[str, Any], batch_size=10, fallback_file="log_fallback.txt"):
         super().__init__()
         self.config = config
         self.mode = self.config.get("logger_mode", "chat")  # Get mode from config ["chat", "training"]
+        self.env = self.config.get("env", "dev")  # Default to 'dev' if not specified
+        self.debug = self.config.get("debug", True)  # Debug mode for more verbose logging
         self.batch_size = batch_size
         self.fallback_file = fallback_file
         self.buffer = []
@@ -232,3 +235,4 @@ class MongoHandler(logging.Handler):
             except Exception as e:
                 self._fallback(f"[MongoHandler Close Error] {str(e)}")
         super().close()
+        

@@ -2,7 +2,7 @@
 # from logger_setup import setup_logger # Make sure this import is correct
 
 # Assuming setup_logger is in logger_setup.py as implemented above
-from logger_setup import setup_logger 
+from .logger_setup import setup_logger 
 
 class LoggerSingleton:
     _instance = None

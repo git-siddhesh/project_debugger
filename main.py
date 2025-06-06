@@ -40,9 +40,10 @@ if __name__ == "__main__":
     # Configuration for the logger
     config = {
         "uri": "mongodb://localhost:27017/",  # Your MongoDB URI
-        "db": "conversational_logs_4",          # Database name
+        "db": "conversational_logs_5",          # Database name
         "env": "prod",                        # Environment (e.g., dev, prod, staging)
         # "logger_mode": "chat", # To be used if setup_logger handles modes
+        "debug": False,                        # Enable debug mode for more verbose logging        
         "logger_mode": "training", 
         "log_batch_size": 5,                  # How many log entries to buffer before flushing
         "log_fallback_file": "app_fallback_logs.txt" # Fallback file

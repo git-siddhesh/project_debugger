@@ -3,8 +3,7 @@
 import logging
 import json
 from datetime import datetime, timezone
-from handlers import MongoHandler # Assuming mongo_handler.py contains your MongoHandler class
-from handlers import MongoHandler # Assuming mongo_handler.py contains your MongoHandler class
+from .handlers import MongoHandler # Assuming mongo_handler.py contains your MongoHandler class
 
 class JsonFormatter(logging.Formatter):
     def format(self, record):
@@ -53,6 +52,18 @@ class JsonFormatter(logging.Formatter):
             # log_record['traceback'] = traceback.format_exc() # Or using formatException
 
         return json.dumps(log_record, default=str)
+    
+class DebugModeFilter(logging.Filter):
+    def __init__(self, debug_enabled: bool):
+        super().__init__()
+        self.debug_enabled = debug_enabled
+
+    def filter(self, record: logging.LogRecord) -> bool:
+        if record.levelno == logging.DEBUG and not self.debug_enabled:
+            return False
+        return True
+
+
 
 def setup_logger(config, log_console=True, logger_name="app_logger"):
     """
@@ -69,8 +80,11 @@ def setup_logger(config, log_console=True, logger_name="app_logger"):
         batch_size=config.get("log_batch_size", 10),
         fallback_file=config.get("log_fallback_file", "log_fallback.txt")
     )
+    debug_mode: bool = config.get("debug", False)
+
     json_formatter = JsonFormatter()
     mongo_handler.setFormatter(json_formatter)
+    mongo_handler.addFilter(DebugModeFilter(debug_enabled=debug_mode))
     logger.addHandler(mongo_handler)
 
     if log_console:
@@ -80,6 +94,7 @@ def setup_logger(config, log_console=True, logger_name="app_logger"):
         if hasattr(json_formatter, 'formatTime'): # For consistency if JsonFormatter customizes time
             console_formatter.formatTime = json_formatter.formatTime
         console_handler.setFormatter(console_formatter)
+        console_handler.addFilter(DebugModeFilter(debug_enabled=debug_mode)) 
         logger.addHandler(console_handler)
         
     logger.propagate = False # Prevent log duplication if root logger also has handlers
