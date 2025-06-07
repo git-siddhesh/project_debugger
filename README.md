@@ -15,6 +15,18 @@ pip install rag-mongo-logger
 
 ---
 
+## Latest Update:
+
+- Turn ON/OFF console log 
+- Provide Custom name to the logger.
+
+```python
+logger = LoggerSingleton.get_logger(config, log_console=True, logger_name="app-logger")
+```
+
+
+
+
 ## ⚙️ Configuration
 
 ```python

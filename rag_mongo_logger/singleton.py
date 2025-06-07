@@ -9,10 +9,10 @@ class LoggerSingleton:
     _handler = None # To store the MongoHandler instance for reopening
 
     @classmethod
-    def get_logger(cls, config):
+    def get_logger(cls, config, log_console=True, logger_name="app_logger"):
         if cls._instance is None:
             # Set log_console to True/False as needed, or make it part of config
-            cls._instance, mongo_handler_instance = setup_logger(config, log_console=True)
+            cls._instance, mongo_handler_instance = setup_logger(config, log_console=log_console, logger_name=logger_name)
             # Store the handler if it's the MongoHandler and has a 'reopen' method
             if hasattr(mongo_handler_instance, 'reopen'):
                  cls._handler = mongo_handler_instance

@@ -51,7 +51,7 @@ if __name__ == "__main__":
 
     print("\nStarting training conversation simulation...")
     config["logger_mode"] = "training"  # Change mode for training logs
-    logger = LoggerSingleton.get_logger(config)
+    logger = LoggerSingleton.get_logger(config, log_console=True, logger_name="app-logger")  # Get the logger instance
 
     run_training_conversation(bot_id="bot_v2", training_id="1", messages_count=7)
     run_training_conversation(bot_id="bot_v2", training_id="1", messages_count=3)
